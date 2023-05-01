@@ -7,7 +7,7 @@ from datetime import datetime
 from dbContext import DbContext
 
 app = TeleBot("Restaurant_Bot")
-app.config['api_key'] = '5449097213:AAEGC40fY9ccfEPoTF_IIG-wX_Eod1ESl80'
+app.config['api_key'] = '6148540855:AAFNaxGTNxK_H332pSG2eCe4rERBSzO2Q44'
 db = DbContext("data")
 users = db.clients
 menu = [

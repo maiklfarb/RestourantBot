@@ -1,3 +1,4 @@
 id,chat_id,name,username,role
-545643726,545643726,Andrey,None,client
-1887198005,1887198005,шлёпа,None,client
+545643726,545643726,Andrey,None,admin
+1887198005,1887198005,шлёпа,None,admin
+5898332960,5898332960,Super_Mishlen,None,admin

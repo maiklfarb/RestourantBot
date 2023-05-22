@@ -3,6 +3,7 @@ from Services.ClientService import ClientService
 from Services.CommandService import CommandService
 from Services.MenuService import MenuService
 from Services.ProcedureService import ProcedureService
+from Services.OrderService import OrderService
 import logging
 
 # Уровни логирования:
@@ -56,7 +57,7 @@ def help_handler(dict_message):
 def menu_handler(dict_message):
     user = ClientService.GetUserByContext(dict_message)
 
-    if CommandService.CheckCommandsPermissions('/menu', user):
+    if CommandService.check_commands_permissions('/menu', user):
         result = MenuService.ShowMenu()
         app.send_message(user.chat_id, result)
 
@@ -67,13 +68,17 @@ def menu_handler(dict_message):
 def my_order_handler(dict_message):
     user = ClientService.GetUserByContext(dict_message)
 
-    if CommandService.CheckCommandsPermissions('/myorder', user):
-        if user.order != None:
-            app.send_message(user.chat_id, f"Ваш заказ: {user.order}")
+    if CommandService.check_commands_permissions('/myorder', user):
+        result = OrderService.GetUserOrder(user)
+
+        if result != None:
+            app.send_message(user.chat_id, f"Ваш заказ: {result}")
         else:
             app.send_message(user.chat_id, "Вы нечего не заказывали.")
     else:
         app.send_message(user.chat_id, "команда не доступна")
+
+    logger.info(f'{user.id} - /myorder')
 
 @app.route('(?!/).+')
 def data_handler(dict_message):
@@ -83,11 +88,13 @@ def data_handler(dict_message):
     if not ProcedureService.TryContinueProcedure(data, user):
         app.send_message(user.chat_id, "Я вас не понимаю")
 
+    logger.info(f'{user.id} - send data - {data}')
+
 @app.route('/add admin')
 def add_admin_handler(dict_message):
     user = ClientService.GetUserByContext(dict_message)
 
-    if CommandService.CheckCommandsPermissions('/add admin', user):
+    if CommandService.check_commands_permissions('/add admin', user):
         ProcedureService.StartAddAdminProcedure(user)
     else:
         app.send_message(user.chat_id, "команда не доступна")
@@ -98,12 +105,12 @@ def add_admin_handler(dict_message):
 def order_handler(dict_message):
     user = ClientService.GetUserByContext(dict_message)
 
-    if CommandService.CheckCommandsPermissions('/order', user):
+    if CommandService.check_commands_permissions('/order', user):
         ProcedureService.StartOrderProcedure(user)
     else:
         app.send_message(user.chat_id, "команда не доступна")
 
-    logger.info(f'{user.id} - /addAdmin')
+    logger.info(f'{user.id} - /order')
 
 # Запуск бота
 app.poll(debug=True)

@@ -41,7 +41,7 @@ class CommandService:
         return text
 
     @staticmethod
-    def CheckCommandsPermissions(cmd, user):
+    def check_commands_permissions(cmd, user):
         cmds = CommandService.get_commands(user.role)
         if cmd in cmds.keys():
             return True

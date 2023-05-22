@@ -119,7 +119,7 @@ class ProcedureService:
     @staticmethod
     def StartOrderProcedure(user):
         procedure = Procedure('оформление заказа', user.chat_id, ProcedureService.orderProcedure.order_procedure_end_handler)
-        action1 = Action(OrderProcedure.ACTION_NAME_DETAILS, ProcedureService.orderProcedure.ask_order_details, MenuService.order_details_data_handler)
+        action1 = Action(OrderProcedure.ACTION_NAME_DETAILS, ProcedureService.orderProcedure.ask_order_details, MenuService.OrderDetailsDataHandler)
         action2 = Action(OrderProcedure.ACTION_NAME_ADDRESS, ProcedureService.orderProcedure.ask_addres, ProcedureService.orderProcedure.address_data_handler)
         action3 = Action(OrderProcedure.ACTION_NAME_TIME, ProcedureService.orderProcedure.ask_time, ProcedureService.orderProcedure.time_data_handler)
         procedure.actions = [action1, action2, action3]

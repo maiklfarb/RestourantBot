@@ -6,7 +6,7 @@ class ClientService:
     users = db.clients
 
     @staticmethod
-    def add_user(id, id_chat, name):
+    def AddUser(id, id_chat, name):
         user = Client(id, id_chat, name)
         ClientService.users.add_client(user)
         ClientService.db.SaveChanges()
@@ -22,7 +22,7 @@ class ClientService:
         found_user = ClientService.db.clients.find_client(id)
 
         if found_user == None:
-            found_user = ClientService.add_user(id, id_chat, name)
+            found_user = ClientService.AddUser(id, id_chat, name)
 
         return found_user
 

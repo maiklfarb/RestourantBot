@@ -36,7 +36,7 @@ class MenuService:
         return False
 
     @staticmethod
-    def order_details_data_handler(order):
+    def OrderDetailsDataHandler(order):
         res = []
         order = order.split(',')
         for item in order:

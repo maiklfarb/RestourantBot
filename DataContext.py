@@ -1,9 +1,8 @@
 from peewee import *
+
+
 db = SqliteDatabase('data/data.sqlite')
 
-class Test:
-    def __init__(self):
-        pass
 class BaseModel(Model):
     class Meta:
         database = db

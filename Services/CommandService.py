@@ -1,3 +1,4 @@
+from Services.LogFactory import LogFactory
 class CommandService:
     clients = {"/help": "получить информацию о командах",
                     "/menu": "просмотр меню",
@@ -46,4 +47,5 @@ class CommandService:
         if cmd in cmds.keys():
             return True
         else:
+            LogFactory.logger.warning(f'{user.chat_id} запрашивает недоступную команду {cmd}')
             return False

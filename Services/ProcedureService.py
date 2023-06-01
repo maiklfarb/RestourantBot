@@ -3,6 +3,7 @@ from Services.ClientService import ClientService
 from Procedure import Procedure
 from Action import Action
 from Services.MenuService import MenuService
+from Services.LogFactory import LogFactory
 
 class IProcedure:
     def __init__(self, app):
@@ -13,6 +14,7 @@ class AddAdminProcedure(IProcedure):
 
     def __init__(self, app):
         super(AddAdminProcedure, self).__init__(app)
+        self.logger = LogFactory.logger
 
     def ask_chatid(self, chatid):
         self.app.send_message(chatid, "укажите чат айди пользователя,которого нужно сделать администратором.")
@@ -21,6 +23,7 @@ class AddAdminProcedure(IProcedure):
         try:
             return int(text)
         except:
+            self.logger.warning(f"AddAdminProcedure.chatid_handler - прислали невалидные данные {text}")
             return -1
 
     def end_handler(self, actions, chatid):
@@ -49,6 +52,7 @@ class OrderProcedure(IProcedure):
 
     def __init__(self, app):
         super(OrderProcedure, self).__init__(app)
+        self.logger = LogFactory.logger
 
     def ask_order_details(self, chatid):
         self.app.send_message(chatid, "Перечислите через запятую,что бы вы хотели заказать.")
@@ -75,7 +79,7 @@ class OrderProcedure(IProcedure):
         user.order = {'address': address, 'details': details, 'time': time}
         self.app.send_message(chatid,
                          f"Процедура оформления заказа окончена, доставка будет доставленна в {time.time()} на адрес: {address}.")
-
+        LogFactory.logger.info(f'{chatid} оформил заказ, {address}, {details}, {time}')
     def time_data_handler(self, textTime):
         # "13:12"
         orderTime = datetime.now()
@@ -100,6 +104,7 @@ class OrderProcedure(IProcedure):
                 raise ValueError()
 
         except ValueError:
+            self.logger.warning(f"OrderProcedure.time_data_handler - прислали время, на которую мы не сможем сделать доставку - {textTime}")
             pass
 
         return orderTime

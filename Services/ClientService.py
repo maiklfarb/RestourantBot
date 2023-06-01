@@ -1,5 +1,6 @@
 from dbContext import DbContext
 from Client import Client
+from Services.LogFactory import LogFactory
 
 class ClientService:
     db = DbContext("./data")
@@ -10,7 +11,7 @@ class ClientService:
         user = Client(id, id_chat, name)
         ClientService.users.add_client(user)
         ClientService.db.SaveChanges()
-        #log(f'Создан новый пользователь: {user.name} {user.role}')
+        LogFactory.logger.info(f'Создан новый пользователь: {user.name} {user.role}')
         return user
 
     @staticmethod

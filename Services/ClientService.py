@@ -7,8 +7,8 @@ class ClientService:
     users = db.clients
 
     @staticmethod
-    def AddUser(id, id_chat, name):
-        user = Client(id, id_chat, name)
+    def AddUser(id, id_chat, name, language_code):
+        user = Client(id, id_chat, name, language_code)
         ClientService.users.add_client(user)
         ClientService.db.SaveChanges()
         LogFactory.logger.info(f'Создан новый пользователь: {user.name} {user.role}')
@@ -19,11 +19,12 @@ class ClientService:
         id_chat = dict_message['chat']['id']
         id = dict_message['from']['id']
         name = dict_message['from']['first_name']
+        language_code = dict_message['from']['language_code']
 
         found_user = ClientService.db.clients.find_client(id)
 
         if found_user == None:
-            found_user = ClientService.AddUser(id, id_chat, name)
+            found_user = ClientService.AddUser(id, id_chat, name, language_code)
 
         return found_user
 

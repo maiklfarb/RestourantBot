@@ -6,12 +6,12 @@ class DbContext:
     def __init__(self, connection):
         self.connection = connection # путь к папке
         self.clients = Clients() # dbSet (отдельная таблица = отдельный dbset)
-        self.clientsColumns = {"id": 0, "chat_id": 1, "name": 2, "username": 3, "role": 4}
+        self.clientsColumns = {"id": 0, "chat_id": 1, "name": 2, "username": 3, "role": 4, "language_code": 5}
         self.Initialize()
 
 
     def SerializeClient(self, client):
-        result = f"{client.id},{client.chat_id},{client.name},{client.username},{client.role}"
+        result = f"{client.id},{client.chat_id},{client.name},{client.username},{client.role},{client.language_code}"
         return result
 
     def DeserializeClient(self, stringClient):
@@ -19,6 +19,7 @@ class DbContext:
         client = Client(int(stringClient[self.clientsColumns['id']]),
                         int(stringClient[self.clientsColumns['chat_id']]),
                         stringClient[self.clientsColumns['name']],
+                        stringClient[self.clientsColumns['language_code']],
                         stringClient[self.clientsColumns['username']],
                         stringClient[self.clientsColumns['role']])
 

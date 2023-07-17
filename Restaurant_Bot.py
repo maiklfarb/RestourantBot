@@ -5,6 +5,7 @@ from Services.MenuService import MenuService
 from Services.ProcedureService import ProcedureService
 from Services.OrderService import OrderService
 from Services.LogFactory import LogFactory
+from Multilang import TR
 
 app = TeleBot("Restaurant_Bot")
 app.config['api_key'] = '6148540855:AAFNaxGTNxK_H332pSG2eCe4rERBSzO2Q44'
@@ -13,7 +14,7 @@ LogFactory.Initialize("bot.log")
 logger = LogFactory.logger
 
 ProcedureService.Initialize(app)
-
+TR.Initialize("resources/translations.json")
 
 @app.route('/help')
 def help_handler(dict_message):
@@ -41,11 +42,14 @@ def my_order_handler(dict_message):
         result = OrderService.GetUserOrder(user)
 
         if result != None:
-            app.send_message(user.chat_id, f"Ваш заказ: {result}")
+            app.send_message(user.chat_id, f"{TR.Get('U5A7B','Your order:',user.language_code)} {result}")
         else:
-            app.send_message(user.chat_id, "Вы нечего не заказывали.")
+            message = TR.Get("t32qY","You didn't order anything.",user.language_code)
+            app.send_message(user.chat_id,message)
+
     else:
-        app.send_message(user.chat_id, "команда не доступна")
+        app.send_message(user.chat_id, TR.Get("9FKKK", "The command is not available.", user.language_code))
+
 
     logger.info(f'{user.id} - /myorder')
 
@@ -55,7 +59,7 @@ def data_handler(dict_message):
     user = ClientService.GetUserByContext(dict_message)
 
     if not ProcedureService.TryContinueProcedure(data, user):
-        app.send_message(user.chat_id, "Я вас не понимаю")
+        app.send_message(user.chat_id, TR.Get("KOo7C", "I don't understand you.", user.language_code))
 
     logger.info(f'{user.id} - send data - {data}')
 
@@ -66,7 +70,7 @@ def add_admin_handler(dict_message):
     if CommandService.check_commands_permissions('/add admin', user):
         ProcedureService.StartAddAdminProcedure(user)
     else:
-        app.send_message(user.chat_id, "команда не доступна")
+        app.send_message(user.chat_id, TR.Get("9FKKK", "The command is not available.", user.language_code))  # такого перевода нет - сделать
 
     logger.info(f'{user.id} - /addAdmin')
 
@@ -77,7 +81,8 @@ def order_handler(dict_message):
     if CommandService.check_commands_permissions('/order', user):
         ProcedureService.StartOrderProcedure(user)
     else:
-        app.send_message(user.chat_id, "команда не доступна")
+        app.send_message(user.chat_id, TR.Get("9FKKK", "The command is not available.", user.language_code))
+
 
     logger.info(f'{user.id} - /order')
 

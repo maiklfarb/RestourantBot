@@ -19,6 +19,7 @@ class Client(BaseModel):
     chatId = IntegerField(null=False, column_name="ChatID")
     username = TextField(null=False, column_name="Username")
     carId = ForeignKeyField(Role, column_name="RoleID", backref="Roles")
+    language_code = TextField(null=False, column_name="lang", default="en")
 
     class Meta:
         table_name = "Clients"
